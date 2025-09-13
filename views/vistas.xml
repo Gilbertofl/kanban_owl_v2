@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vista Formulario -->
+    <record id="view_mi_modelo_form" model="ir.ui.view">
+        <field name="name">mi.modelo.form</field>
+        <field name="model">mi.modelo</field>
+        <field name="arch" type="xml">
+            <form>
+            <h2><field name="name" /></h2>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="image" widget="image"/>
+                        <field name="descripcion"/>
+                        <field name="descripcion" widget="simple_fixed"/>
+                    </group>
+                    <notebook>
+                        <page string="asdasdasd">
+                            <group name="name" string="string">
+                            <field string="HOla" name="name" />
+                            <field string="Sirve?" name="name" widget="animated_svg_widget" />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Acción de cliente para el componente OWL -->
+    <record id="action_mi_kanban_owl" model="ir.actions.client">
+        <field name="name">Mi Kanban OWL</field>
+        <field name="tag">mi_kanban_basico.MiKanbanComponente</field>
+    </record>
+
+    <!-- Menús -->
+    <menuitem id="menu_mi_modelo_root" name="Mi Kanban"/>
+    <menuitem id="menu_mi_kanban_owl" name="Kanban OWL" parent="menu_mi_modelo_root" action="action_mi_kanban_owl"/>
+</odoo>

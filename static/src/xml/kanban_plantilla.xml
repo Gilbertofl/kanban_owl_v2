@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mi_kanban_basico.MiKanbanComponente" owl="1">
+        <div class="o_kanban_view o_kanban_dashboard" style="padding: 20px;">
+            <div class="o_kanban_header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Mi Kanban Personalizado OWL</h2>
+                <div>
+                    <button class="btn btn-secondary" t-on-click="recargarElementos" style="margin-right: 10px;">
+                        <i class="fa fa-refresh"/> Recargar
+                    </button>
+                    <button class="btn btn-primary" t-on-click="abrirFormularioNuevo">
+                        <i class="fa fa-plus"/> Nuevo Elemento
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mostrar error si existe -->
+            <t t-if="state.error">
+                <div class="alert alert-danger" role="alert">
+                    <i class="fa fa-exclamation-triangle"/> 
+                    <t t-esc="state.error"/>
+                </div>
+            </t>
+            
+            <t t-if="state.cargando">
+                <div class="text-center mt-3">
+                    <i class="fa fa-refresh fa-spin fa-2x"/> 
+                    <p>Cargando elementos...</p>
+                </div>
+            </t>
+            
+            <t t-elif="state.elementos.length === 0">
+                <div class="alert alert-info" role="alert">
+                    <i class="fa fa-info-circle"/> 
+                    No hay elementos creados. 
+                    <button class="btn btn-sm btn-primary" t-on-click="abrirFormularioNuevo">
+                        Crear primer elemento
+                    </button>
+                </div>
+            </t>
+            
+            <t t-else="">
+                <div class="row">
+                    <t t-foreach="state.elementos" t-as="elemento" t-key="elemento.id">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100" style="cursor: pointer;" t-on-click="() => abrirElemento(elemento)">
+                                <t t-if="elemento.image">
+                                    <img t-att-src="'data:image/png;base64,' + elemento.image" 
+                                         class="card-img-top" alt="Imagen"
+                                         style="height: 200px; object-fit: cover;"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                                         style="height: 200px;">
+                                        <i class="fa fa-image fa-3x text-muted"/>
+                                    </div>
+                                </t>
+                                <div class="card-body">
+                                    <h5 class="card-title" t-esc="elemento.name"/>
+                                    <p class="card-text text-muted" 
+                                       t-esc="elemento.descripcion || 'Sin descripción'"/>
+                                    
+                                    <!-- Barra de progreso de caracteres -->
+                                    <t t-if="elemento.descripcion">
+                                        <div class="progress mt-2" style="height: 5px;">
+                                            <div class="progress-bar" 
+                                                 t-att-class="elemento.descripcion.length > 255 ? 'bg-danger' : (elemento.descripcion.length > 200 ? 'bg-warning' : 'bg-success')"
+                                                 role="progressbar" 
+                                                 t-att-style="'width: ' + (elemento.descripcion.length / 255 * 100) + '%;'"
+                                                 t-att-aria-valuenow="elemento.descripcion.length"
+                                                 aria-valuemin="0" 
+                                                 aria-valuemax="255">
+                                            </div>
+                                        </div>
+                                        <small class="text-muted">
+                                            <t t-esc="elemento.descripcion.length"/> / 255 caracteres
+                                            <t t-if="elemento.descripcion.length > 255">
+                                                <span class="text-danger"> (Límite excedido)</span>
+                                            </t>
+                                        </small>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                
+                <div class="mt-3 text-center">
+                    <p>Total de elementos: <strong t-esc="state.elementos.length"/></p>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>
