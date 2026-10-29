@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extensión de la vista formulario de producto para configurar stock de seguridad -->
+    <record id="view_product_template_form_stock_health" model="ir.ui.view">
+        <field name="name">product.template.stock.health.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='inventory']" position="inside">
+                <group string="Control de Salud de Inventario (Tablero OWL)" name="stock_health_group">
+                    <group>
+                        <field name="x_min_security_stock"/>
+                        <field name="x_stock_health_status" widget="badge"
+                               decoration-danger="x_stock_health_status == 'critical'"
+                               decoration-warning="x_stock_health_status == 'warning'"
+                               decoration-success="x_stock_health_status == 'optimal'"/>
+                    </group>
+                    <group>
+                        <field name="x_replenish_requested" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Acción de Cliente para desplegar el componente OWL v2 -->
+    <record id="action_stock_health_board" model="ir.actions.client">
+        <field name="name">Monitor de Stock (OWL)</field>
+        <field name="tag">kanban_owl_v2.stock_board</field>
+        <field name="target">main</field>
+    </record>
+
+    <!-- Menús en Odoo -->
+    <!-- Menú principal independiente para acceso rápido -->
+    <menuitem
+        id="menu_stock_health_root"
+        name="Tablero Stock OWL"
+        action="action_stock_health_board"
+        web_icon="stock,static/description/icon.png"
+        sequence="25"
+    />
+
+    <!-- Entrada de menú dentro del módulo de Inventario estándar -->
+    <menuitem
+        id="menu_stock_health_inventory_submenu"
+        name="Monitor de Stock (OWL)"
+        parent="stock.menu_stock_warehouse_mgmt"
+        action="action_stock_health_board"
+        sequence="5"
+    />
+
+</odoo>
